@@ -7,11 +7,12 @@ import { Star, ShoppingBag, Heart, Sparkles, AlertTriangle } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react";
 
 export default function Collections() {
-  const { addToCart } = useCart();
+  const { addToCart, toggleWishlist, isFavorite } = useCart();
   const { user } = useAuth();
   const [products, setProducts] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState<"none" | "priceAsc" | "priceDesc" | "rating">("none");
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
@@ -39,15 +40,20 @@ export default function Collections() {
     fetchProducts();
   }, []);
 
-  const filteredProducts = selectedCategory === "All"
-    ? products
-    : products.filter((p) => p.category === selectedCategory);
-
-  const toggleFavorite = (id: string) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
-    );
-  };
+  const lowerSearch = searchTerm.toLowerCase().trim();
+  const filteredProducts = products
+    .filter((p) => {
+      const label = `${p.name} ${p.description} ${p.category} ${(p.tags || []).join(" ")}`.toLowerCase();
+      const categoryMatch = selectedCategory === "All" || p.category === selectedCategory;
+      const searchMatch = !lowerSearch || label.includes(lowerSearch);
+      return categoryMatch && searchMatch;
+    })
+    .sort((a, b) => {
+      if (sortBy === "priceAsc") return (a.price || 0) - (b.price || 0);
+      if (sortBy === "priceDesc") return (b.price || 0) - (a.price || 0);
+      if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
+      return 0;
+    });
 
   const handleSizeChange = (productId: string, size: string) => {
     setSelectedSizes((prev) => ({ ...prev, [productId]: size }));
@@ -138,6 +144,30 @@ export default function Collections() {
           </motion.p>
         </div>
 
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+          <div className="flex-1 min-w-0">
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search bouquets, styles, tags..."
+              className="w-full rounded-none border border-brand-dark/10 bg-white px-4 py-3 text-sm text-brand-dark placeholder-brand-dark/40 focus:border-brand-gold focus:outline-none"
+            />
+          </div>
+          <div className="flex gap-3 items-center">
+            <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-dark/50">Sort by</label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="rounded-none border border-brand-dark/10 bg-white px-3 py-2 text-xs text-brand-dark focus:border-brand-gold focus:outline-none"
+            >
+              <option value="none">Featured</option>
+              <option value="priceAsc">Price: Low to high</option>
+              <option value="priceDesc">Price: High to low</option>
+              <option value="rating">Top rated</option>
+            </select>
+          </div>
+        </div>
+
         {/* Swipeable Category Filters Row */}
         <div className="w-full overflow-x-auto scrollbar-none mb-24 -mx-6 px-6 md:mx-0 md:px-0">
           <div className="flex whitespace-nowrap gap-3 md:justify-start min-w-max pb-2">
@@ -170,7 +200,6 @@ export default function Collections() {
                 const productId = product._id || product.id;
                 const selectedSize = selectedSizes[productId] || "Classic";
                 const displayedPrice = getProductPrice(product);
-                const isFavorite = favorites.includes(productId);
                 const layoutClass = getCardLayoutClass(index);
                 const isWideCard = index % 6 === 3;
                 const isSoldOut = product.stock === 0;
@@ -222,15 +251,15 @@ export default function Collections() {
 
                       {/* Quick wishlist */}
                       <button
-                        onClick={() => toggleFavorite(productId)}
+                        onClick={() => toggleWishlist(productId)}
                         className={`absolute top-4 right-4 rounded-full p-2.5 bg-white/80 backdrop-blur-xs shadow-xs transition-all duration-300 focus:outline-none ${
-                          isFavorite
+                          isFavorite(productId)
                             ? "bg-red-50 text-red-600 border border-red-100"
                             : "border border-brand-dark/5 text-brand-dark/80 hover:bg-white hover:text-red-500"
                         }`}
                         aria-label="Wishlist Bouquet"
                       >
-                        <Heart className={`h-4 w-4 ${isFavorite ? "fill-red-600 text-red-600" : ""}`} />
+                        <Heart className={`h-4 w-4 ${isFavorite(productId) ? "fill-red-600 text-red-600" : ""}`} />
                       </button>
                     </div>
 

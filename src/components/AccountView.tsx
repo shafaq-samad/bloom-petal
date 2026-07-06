@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth, RecipientProfile } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   LogOut, MapPin, Gift, Clipboard, RefreshCw, 
-  CheckCircle, Truck, Package, Clock, Eye, X, Plus, Trash2
+  CheckCircle, Truck, Package, Clock, Eye, X, Plus, Trash2, Heart
 } from "lucide-react";
 
 interface OrderProduct {
@@ -36,6 +37,7 @@ interface OrderDetails {
 
 export default function AccountView() {
   const { user, login, register, logout, updateAddresses, updateRecipients } = useAuth();
+  const { addToCart, favoriteCount, wishlist } = useCart();
   
   // Auth Form State
   const [isLoginTab, setIsLoginTab] = useState(true);
@@ -50,13 +52,36 @@ export default function AccountView() {
   // Profile forms
   const [newAddress, setNewAddress] = useState("");
   const [newRecipient, setNewRecipient] = useState({ name: "", address: "", deliveryNote: "" });
-  const [activeProfileTab, setActiveProfileTab] = useState<"orders" | "addresses" | "recipients">("orders");
+  const [activeProfileTab, setActiveProfileTab] = useState<"orders" | "addresses" | "recipients" | "favorites">("orders");
+  const [favoriteProducts, setFavoriteProducts] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
       fetchOrders();
     }
   }, [user]);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (!wishlist || wishlist.length === 0) {
+        setFavoriteProducts([]);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/products");
+        if (res.ok) {
+          const allProducts = await res.json();
+          setFavoriteProducts(
+            allProducts.filter((product: any) => wishlist.includes(product._id || product.id))
+          );
+        }
+      } catch (err) {
+        console.error("Failed to load favorite products", err);
+      }
+    };
+    fetchFavorites();
+  }, [wishlist]);
 
   const fetchOrders = async () => {
     setLoadingOrders(true);
@@ -225,15 +250,46 @@ export default function AccountView() {
   }
 
   // Logged-in Customer View
+  if (user.role === "admin") {
+    return (
+      <div className="min-h-screen bg-brand-cream pt-32 pb-24 flex items-center justify-center px-6">
+        <div className="w-full max-w-xl bg-white border border-brand-dark/10 p-10 shadow-sm text-center">
+          <h2 className="font-serif text-3xl font-light text-brand-dark mb-4">Admin Access</h2>
+          <p className="text-sm text-brand-dark/70 mb-8">
+            The customer account page is not used for admin users. Please use the Admin Panel to manage products, orders, and settings.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => { window.location.hash = "#admin"; }}
+              className="rounded-none bg-brand-dark px-8 py-3 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-brand-sage transition-all"
+            >
+              Go to Admin Panel
+            </button>
+            <button
+              onClick={logout}
+              className="rounded-none border border-brand-dark/15 px-8 py-3 text-[10px] font-bold uppercase tracking-widest text-brand-dark hover:bg-brand-cream transition-all"
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const orderCount = orders.length;
+  const addressCount = user.savedAddresses?.length || 0;
+  const recipientCount = user.savedRecipients?.length || 0;
+
   return (
     <div className="min-h-screen bg-brand-cream pt-32 pb-24 text-brand-dark px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
         {/* Header Profile Summary */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-brand-dark/10 pb-8 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-brand-dark/10 pb-8 mb-8 gap-6">
           <div>
-                <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <span className="text-[9px] font-bold tracking-[0.2em] bg-brand-blush px-3 py-1 text-brand-sage uppercase font-sans">
-                {user.role === "admin" ? "Admin" : "Your Account"}
+                Your Account
               </span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl font-light tracking-tight text-brand-dark mt-2">
@@ -250,6 +306,30 @@ export default function AccountView() {
             <LogOut className="h-3.5 w-3.5" />
             Sign Out
           </button>
+        </div>
+
+        {/* Quick account overview */}
+        <div className="grid gap-4 mb-8 md:grid-cols-4">
+          <div className="rounded-none border border-brand-dark/10 bg-white p-5 text-center">
+            <p className="text-[9px] uppercase tracking-[0.25em] text-brand-dark/40 mb-3">Orders</p>
+            <p className="font-serif text-3xl text-brand-burgundy">{orderCount}</p>
+            <p className="text-[10px] text-brand-dark/60 mt-2">Orders in your history</p>
+          </div>
+          <div className="rounded-none border border-brand-dark/10 bg-white p-5 text-center">
+            <p className="text-[9px] uppercase tracking-[0.25em] text-brand-dark/40 mb-3">Addresses</p>
+            <p className="font-serif text-3xl text-brand-burgundy">{addressCount}</p>
+            <p className="text-[10px] text-brand-dark/60 mt-2">Saved shipping addresses</p>
+          </div>
+          <div className="rounded-none border border-brand-dark/10 bg-white p-5 text-center">
+            <p className="text-[9px] uppercase tracking-[0.25em] text-brand-dark/40 mb-3">Recipients</p>
+            <p className="font-serif text-3xl text-brand-burgundy">{recipientCount}</p>
+            <p className="text-[10px] text-brand-dark/60 mt-2">Saved gift profiles</p>
+          </div>
+          <div className="rounded-none border border-brand-dark/10 bg-white p-5 text-center">
+            <p className="text-[9px] uppercase tracking-[0.25em] text-brand-dark/40 mb-3">Wishlist</p>
+            <p className="font-serif text-3xl text-brand-burgundy">{favoriteCount}</p>
+            <p className="text-[10px] text-brand-dark/60 mt-2">Saved favorites</p>
+          </div>
         </div>
 
         {/* Multi-tab workspace layout */}
@@ -282,6 +362,15 @@ export default function AccountView() {
             >
               <Gift className="h-4 w-4" />
               Recipients
+            </button>
+            <button
+              onClick={() => setActiveProfileTab("favorites")}
+              className={`flex items-center gap-2.5 pb-2 lg:pb-0 lg:py-3.5 px-4 text-left text-[10px] font-bold uppercase tracking-widest transition-all focus:outline-none shrink-0 ${
+                activeProfileTab === "favorites" ? "text-brand-burgundy border-b-2 lg:border-b-0 lg:border-l-2 border-brand-burgundy font-extrabold bg-white/40" : "text-brand-dark/50 hover:text-brand-dark"
+              }`}
+            >
+              <Heart className="h-4 w-4" />
+              Favorites
             </button>
           </nav>
 
@@ -337,13 +426,23 @@ export default function AccountView() {
                             Amount: ${order.totalAmount}
                           </p>
                         </div>
-                        <button
-                          onClick={() => setSelectedOrder(order)}
-                          className="flex items-center gap-1.5 px-4.5 py-2.5 text-[9px] font-bold uppercase tracking-widest border border-brand-dark/20 text-brand-dark hover:border-brand-dark focus:outline-none transition-colors"
-                        >
-                          <Eye className="h-3.5 w-3.5" />
-                          Track Order
-                        </button>
+                        <div className="flex flex-wrap gap-3">
+                          <button
+                            onClick={() => setSelectedOrder(order)}
+                            className="flex items-center gap-1.5 px-4.5 py-2.5 text-[9px] font-bold uppercase tracking-widest border border-brand-dark/20 text-brand-dark hover:border-brand-dark focus:outline-none transition-colors"
+                          >
+                            <Eye className="h-3.5 w-3.5" />
+                            Track Order
+                          </button>
+                          <button
+                            onClick={() => order.items.forEach((item) => addToCart(item.product as any, item.selectedSize))}
+                            aria-label={`Reorder order ${order._id.substring(18).toUpperCase()}`}
+                            className="flex items-center gap-1.5 px-4.5 py-2.5 text-[9px] font-bold uppercase tracking-widest border border-brand-dark/20 bg-brand-sage/10 text-brand-dark hover:bg-brand-sage/20 focus:outline-none transition-colors"
+                          >
+                            <Plus className="h-3.5 w-3.5" />
+                            Reorder
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -494,6 +593,73 @@ export default function AccountView() {
                         )}
                       </div>
                     ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeProfileTab === "favorites" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-serif text-2xl font-light text-brand-dark">Your Favorites</h3>
+                    <p className="text-[10px] text-brand-dark/60">Saved bouquets ready to order again.</p>
+                  </div>
+                </div>
+
+                {favoriteProducts.length === 0 ? (
+                  <div className="bg-white border border-brand-dark/5 p-8 text-center font-body-serif italic text-brand-dark/40">
+                    No favorites saved yet. Add any bouquet from the shop and come back here to reorder.
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-brand-cream border border-brand-dark/10 p-4">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-[0.25em] text-brand-dark/40">One-click refresh</p>
+                        <h4 className="font-serif text-lg font-light text-brand-dark">Reorder all saved favorites</h4>
+                      </div>
+                      <button
+                        onClick={() => favoriteProducts.forEach((product) => addToCart(product, product.sizeOptions?.[0] || "Classic"))}
+                        className="rounded-none bg-brand-dark px-5 py-3 text-[9px] font-bold uppercase tracking-widest text-white hover:bg-brand-sage transition-all"
+                        aria-label="Add all favorite products to cart"
+                      >
+                        Reorder every favorite
+                      </button>
+                    </div>
+                    <div className="grid gap-4">
+                      {favoriteProducts.map((product) => {
+                        const productId = product._id || product.id;
+                        return (
+                          <div key={productId} className="bg-white border border-brand-dark/5 p-5 flex flex-col md:flex-row gap-4 items-start">
+                            <img src={product.image} alt={product.name} className="h-24 w-24 object-cover border border-brand-dark/10" />
+                            <div className="flex-1 space-y-2">
+                              <div className="flex items-center justify-between gap-3">
+                                <div>
+                                  <h4 className="font-serif text-lg font-semibold text-brand-dark">{product.name}</h4>
+                                  <p className="text-[10px] text-brand-dark/60">{product.category}</p>
+                                </div>
+                                <span className="font-serif text-xl font-light text-brand-burgundy">${product.price}</span>
+                              </div>
+                              <p className="text-[11px] text-brand-dark/70 leading-relaxed">{product.description}</p>
+                              <div className="flex flex-wrap gap-3">
+                                <button
+                                  onClick={() => addToCart(product, product.sizeOptions?.[0] || "Classic")}
+                                  className="rounded-none bg-brand-dark px-5 py-3 text-[9px] font-bold uppercase tracking-widest text-white hover:bg-brand-sage transition-all"
+                                >
+                                  Reorder
+                                </button>
+                                <button
+                                  onClick={() => { window.location.hash = "#collections"; }}
+                                  className="rounded-none border border-brand-dark/10 px-5 py-3 text-[9px] font-bold uppercase tracking-widest text-brand-dark hover:bg-brand-cream transition-all"
+                                >
+                                  Continue Shopping
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>

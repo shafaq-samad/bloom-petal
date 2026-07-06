@@ -11,6 +11,8 @@ export interface PromoCodeDetails {
 interface CartContextType {
   cart: CartItem[];
   isCartOpen: boolean;
+  wishlist: string[];
+  favoriteCount: number;
   addToCart: (product: Product, size?: string) => void;
   removeFromCart: (productId: string, size: string) => void;
   updateQuantity: (productId: string, size: string, quantity: number) => void;
@@ -18,6 +20,8 @@ interface CartContextType {
   openCart: () => void;
   closeCart: () => void;
   clearCart: () => void;
+  toggleWishlist: (productId: string) => void;
+  isFavorite: (productId: string) => boolean;
   cartCount: number;
   cartSubtotal: number;
   cartTotal: number;
@@ -29,14 +33,16 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const getProductId = (product: Product) => product.id || (product as any)._id || "";
+
+export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem("bloom_petal_cart");
     try {
       const parsed = saved ? JSON.parse(saved) : [];
       // Remove a known demo/default item if present (prevents a seeded demo product showing by default)
       if (Array.isArray(parsed)) {
-        return parsed.filter((it) => !(it?.product?.id === "prod-1"));
+        return parsed.filter((it) => getProductId(it.product) !== "prod-1");
       }
       return [];
     } catch (err) {
@@ -44,6 +50,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [wishlist, setWishlist] = useState<string[]>(() => {
+    const saved = localStorage.getItem("bloom_petal_wishlist");
+    try {
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
   const [promoCode, setPromoCode] = useState<PromoCodeDetails | null>(() => {
     const saved = localStorage.getItem("bloom_petal_promo");
     return saved ? JSON.parse(saved) : null;
@@ -53,15 +68,24 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("bloom_petal_cart", JSON.stringify(cart));
   }, [cart]);
 
+  useEffect(() => {
+    localStorage.setItem("bloom_petal_wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
+
   // If an admin logs in, clear any cart and prevent cart usage
   const { user } = useAuth();
 
+  const isAdmin = user?.role === "admin";
+
   useEffect(() => {
-    if (user && user.role === "admin") {
+    if (isAdmin) {
       setCart([]);
+      setIsCartOpen(false);
+      setPromoCode(null);
       localStorage.removeItem("bloom_petal_cart");
+      localStorage.removeItem("bloom_petal_promo");
     }
-  }, [user]);
+  }, [isAdmin]);
 
   useEffect(() => {
     if (promoCode) {
@@ -72,12 +96,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [promoCode]);
 
   const addToCart = (product: Product, size: string = "Classic") => {
-    // Prevent admin users from adding to cart
-    if (user && user.role === "admin") return;
+    if (isAdmin) return;
+
+    const productId = getProductId(product);
+    if (!productId) return;
 
     setCart((prevCart) => {
       const existingIndex = prevCart.findIndex(
-        (item) => item.product.id === product.id && item.selectedSize === size
+        (item) => getProductId(item.product) === productId && item.selectedSize === size
       );
 
       if (existingIndex > -1) {
@@ -93,7 +119,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const removeFromCart = (productId: string, size: string) => {
     setCart((prevCart) =>
-      prevCart.filter((item) => !(item.product.id === productId && item.selectedSize === size))
+      prevCart.filter((item) => !(getProductId(item.product) === productId && item.selectedSize === size))
     );
   };
 
@@ -104,15 +130,29 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.product.id === productId && item.selectedSize === size
+        getProductId(item.product) === productId && item.selectedSize === size
           ? { ...item, quantity }
           : item
       )
     );
   };
 
-  const toggleCart = () => setIsCartOpen((prev) => !prev);
-  const openCart = () => setIsCartOpen(true);
+  const toggleWishlist = (productId: string) => {
+    setWishlist((prev) =>
+      prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]
+    );
+  };
+
+  const isFavorite = (productId: string) => wishlist.includes(productId);
+
+  const toggleCart = () => {
+    if (isAdmin) return;
+    setIsCartOpen((prev) => !prev);
+  };
+  const openCart = () => {
+    if (isAdmin) return;
+    setIsCartOpen(true);
+  };
   const closeCart = () => setIsCartOpen(false);
   const clearCart = () => {
     setCart([]);
@@ -120,6 +160,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const favoriteCount = wishlist.length;
 
   // Deluxe adds +$30, Grandeur adds +$65 to custom pricing
   const cartSubtotal = cart.reduce((total, item) => {
@@ -173,6 +214,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         cart,
         isCartOpen,
+        wishlist,
+        favoriteCount,
         addToCart,
         removeFromCart,
         updateQuantity,
@@ -180,6 +223,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         openCart,
         closeCart,
         clearCart,
+        toggleWishlist,
+        isFavorite,
         cartCount,
         cartSubtotal,
         cartTotal,
@@ -194,10 +239,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useCart = () => {
+export function useCart() {
   const context = useContext(CartContext);
   if (!context) {
     throw new Error("useCart must be used within a CartProvider");
   }
   return context;
-};
+}

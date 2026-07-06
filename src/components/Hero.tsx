@@ -71,8 +71,8 @@ export default function Hero({ onShopClick, onAboutClick, cms }: HeroProps) {
       </div>
 
       {/* Main Content Container */}
-      <div className="relative z-20 w-full max-w-7xl px-6 md:px-12 py-32 lg:py-0 flex items-center min-h-screen">
-        <div className="grid w-full items-center gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+      <div className="relative z-20 w-full max-w-7xl px-6 md:px-12 py-28 lg:py-0 flex items-center min-h-screen">
+        <div className="grid w-full items-center gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12">
           
           {/* Text Content Column */}
           <div className="relative space-y-10 text-left lg:pt-16">
@@ -85,35 +85,38 @@ export default function Hero({ onShopClick, onAboutClick, cms }: HeroProps) {
             </motion.div>
 
             <div className="space-y-6">
-              <h1 className="text-6xl sm:text-7xl xl:text-8xl font-serif font-normal leading-[0.9] tracking-tight text-brand-dark">
+              <h1 className="text-5xl sm:text-6xl xl:text-7xl font-serif font-normal leading-tight tracking-tight text-brand-dark">
                 {cms?.heroTitle ? (
                   <span className="block">{cms.heroTitle}</span>
                 ) : (
                   <>
                     <span className="block">Fresh flowers</span>
-                    <span className="block font-body-serif font-normal text-brand-burgundy pl-4 sm:pl-8">for your home</span>
-                    <span className="block">and special days.</span>
+                    <span className="block font-body-serif font-normal text-brand-burgundy">made easy</span>
                   </>
                 )}
               </h1>
-              
-              <p className="max-w-lg text-base sm:text-lg font-body-serif font-light leading-relaxed text-brand-dark/80 pt-2">
-                {cms?.heroSubtitle || "We create beautiful bouquets and event flowers that feel personal, easy to enjoy, and thoughtfully designed for real life."}
+
+              <p className="max-w-xl text-sm sm:text-base font-body-serif font-light leading-relaxed text-brand-dark/80 pt-2">
+                {cms?.heroSubtitle || "Beautiful bouquets, hand-picked blooms, and fast delivery so gifting feels effortless."}
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 id="hero-shop-now-btn"
+                type="button"
                 onClick={onShopClick}
-                className="group relative overflow-hidden rounded-none border border-brand-dark bg-brand-dark px-8 py-4 text-center text-xs font-bold uppercase tracking-widest text-white transition-all duration-500 hover:text-brand-dark "
+                aria-label="Shop flowers now"
+                className="group relative overflow-hidden rounded-none border border-brand-dark bg-brand-dark px-8 py-4 text-center text-xs font-bold uppercase tracking-widest text-white transition-all duration-500 hover:text-brand-dark"
               >
                 <span className="absolute inset-0 bg-brand-cream transition-transform duration-500 origin-left scale-x-0 group-hover:scale-x-100" />
                 <span className="relative z-10">Shop Flowers</span>
               </button>
               <button
                 id="hero-about-us-btn"
+                type="button"
                 onClick={onAboutClick}
+                aria-label="Learn about our story"
                 className="group relative overflow-hidden rounded-none border border-brand-dark/20 px-8 py-4 text-center text-xs font-bold uppercase tracking-widest text-brand-dark transition-all duration-500 hover:border-brand-dark"
               >
                 <span className="absolute inset-0 bg-brand-blush transition-transform duration-500 origin-left scale-x-0 group-hover:scale-x-100" />
@@ -122,18 +125,18 @@ export default function Hero({ onShopClick, onAboutClick, cms }: HeroProps) {
             </div>
 
             {/* Micro stats banner */}
-            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-brand-dark/5 max-w-md">
-              <div>
-                <p className="font-serif text-3xl text-brand-burgundy font-light">I</p>
-                <p className="text-[9px] font-bold uppercase tracking-widest text-brand-dark/50 mt-1">Sustainably Sourced</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-brand-dark/5 max-w-xl">
+              <div className="rounded-none border border-brand-dark/10 bg-white p-4 text-sm text-brand-dark">
+                <strong className="block text-brand-dark font-semibold">Sustainably sourced</strong>
+                Thoughtfully chosen blooms from trusted growers.
               </div>
-              <div>
-                <p className="font-serif text-3xl text-brand-burgundy font-light">II</p>
-                <p className="text-[9px] font-bold uppercase tracking-widest text-brand-dark/50 mt-1">Artfully Designed</p>
+              <div className="rounded-none border border-brand-dark/10 bg-white p-4 text-sm text-brand-dark">
+                <strong className="block text-brand-dark font-semibold">Carefully designed</strong>
+                Every bouquet is arranged to feel effortless and elegant.
               </div>
-              <div>
-                <p className="font-serif text-3xl text-brand-burgundy font-light">III</p>
-                <p className="text-[9px] font-bold uppercase tracking-widest text-brand-dark/50 mt-1">Guaranteed Fresh</p>
+              <div className="rounded-none border border-brand-dark/10 bg-white p-4 text-sm text-brand-dark">
+                <strong className="block text-brand-dark font-semibold">Fresh delivery</strong>
+                Fast shipping for the happiest arrivals.
               </div>
             </div>
           </div>
@@ -144,18 +147,19 @@ export default function Hero({ onShopClick, onAboutClick, cms }: HeroProps) {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.4, ease: [0.25, 1, 0.5, 1] }}
-              className="relative w-full max-w-[680px] lg:max-w-[760px]"
+              className="relative w-full max-w-[760px] lg:max-w-[860px]"
             >
               {/* Primary Image Frame */}
-              <div className="editorial-frame aspect-[4/5] overflow-hidden shadow-2xl relative">
+              <div className="editorial-frame aspect-[5/6] overflow-hidden shadow-2xl relative min-h-[520px] md:min-h-[640px]">
                 <motion.img
                   src={
                     cms?.heroImage ||
                     "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&q=80&w=1600"
                   }
-                  alt="Pink tulip bouquet"
+                  alt="A bright bouquet of fresh flowers"
+                  loading="eager"
                   className="h-full w-full object-cover"
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/20 to-transparent" />

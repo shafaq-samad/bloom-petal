@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { Menu, X, ShoppingBag, Flower, User, Settings } from "lucide-react";
+import { Menu, X, ShoppingBag, Flower, User, Settings, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface NavbarProps {
@@ -9,7 +9,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onNavClick }: NavbarProps) {
-  const { toggleCart, cartCount } = useCart();
+  const { toggleCart, cartCount, favoriteCount } = useCart();
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -78,6 +78,7 @@ export default function Navbar({ onNavClick }: NavbarProps) {
               {/* Admin Dashboard shortcut */}
               {user && user.role === "admin" && (
                 <button
+                  type="button"
                   onClick={() => { window.location.hash = "#admin"; }}
                   className="relative text-[10px] font-bold uppercase tracking-widest text-brand-sage hover:text-brand-burgundy transition-colors duration-300 py-1 group focus:outline-none flex items-center gap-1"
                 >
@@ -101,26 +102,50 @@ export default function Navbar({ onNavClick }: NavbarProps) {
               </button>
 
               {/* Shopping Bag Button */}
-              <button
-                id="navbar-cart-btn"
-                onClick={toggleCart}
-                className="relative rounded-none p-2.5 bg-white border border-brand-dark/5 text-brand-dark hover:border-brand-dark transition-all duration-300 shadow-xs focus:outline-none"
-                aria-label="Open Cart Bag"
-              >
-                <ShoppingBag className="h-4.5 w-4.5 text-brand-dark/90" />
-                <AnimatePresence>
-                  {cartCount > 0 && (
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-brand-burgundy text-[8px] font-bold text-white shadow-sm"
-                    >
-                      {cartCount}
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </button>
+              {(!user || user.role !== 'admin') && (
+                <>
+                  <button
+                    id="navbar-favorites-btn"
+                    onClick={() => { window.location.hash = "#account"; }}
+                    className="relative rounded-none p-2.5 bg-white border border-brand-dark/5 text-brand-dark hover:border-brand-dark transition-all duration-300 shadow-xs focus:outline-none"
+                    aria-label="Go to Favorites"
+                  >
+                    <Heart className="h-4.5 w-4.5 text-brand-dark/90" />
+                    <AnimatePresence>
+                      {favoriteCount > 0 && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-brand-burgundy text-[8px] font-bold text-white shadow-sm"
+                        >
+                          {favoriteCount}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </button>
+                  <button
+                    id="navbar-cart-btn"
+                    onClick={toggleCart}
+                    className="relative rounded-none p-2.5 bg-white border border-brand-dark/5 text-brand-dark hover:border-brand-dark transition-all duration-300 shadow-xs focus:outline-none"
+                    aria-label="Open Cart Bag"
+                  >
+                    <ShoppingBag className="h-4.5 w-4.5 text-brand-dark/90" />
+                    <AnimatePresence>
+                      {cartCount > 0 && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-brand-burgundy text-[8px] font-bold text-white shadow-sm"
+                        >
+                          {cartCount}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </button>
+                </>
+              )}
 
               {/* Mobile Menu Toggle */}
               <button
@@ -179,6 +204,7 @@ export default function Navbar({ onNavClick }: NavbarProps) {
                 {navLinks.map((link) => (
                   <button
                     key={link.id}
+                    type="button"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       link.action();

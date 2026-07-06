@@ -75,7 +75,7 @@ interface BlogPostItem {
 }
 
 export default function AdminPanel() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   
   // Tab control
   const [activeTab, setActiveTab] = useState<"dashboard" | "catalog" | "inventory" | "orders" | "discounts" | "reviews" | "cms" | "blog">("dashboard");
@@ -378,6 +378,9 @@ export default function AdminPanel() {
   const scheduledDeliveries = orders.filter(o => o.deliveryDate === calendarDate);
   const morningDeliveries = scheduledDeliveries.filter(o => o.deliverySlot === "morning");
   const afternoonDeliveries = scheduledDeliveries.filter(o => o.deliverySlot === "afternoon");
+  const pendingOrders = orders.filter(o => o.status !== "delivered");
+  const lowStockItems = products.filter((product) => product.stock <= (product.lowStockThreshold || 5));
+  const nextScheduledDelivery = scheduledDeliveries[0];
 
   return (
     <div className="min-h-screen bg-brand-cream pt-28 pb-24 text-brand-dark px-6 md:px-12 print:bg-white print:p-0 print:pt-0">
@@ -475,19 +478,31 @@ export default function AdminPanel() {
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-brand-dark/10 pb-6 mb-8 gap-4">
           <div>
             <span className="text-[10px] font-bold tracking-[0.2em] text-brand-sage uppercase font-sans">
-              Directorate Suite
+              Admin Dashboard
             </span>
             <h1 className="font-serif text-4xl md:text-5xl font-light tracking-tight text-brand-dark mt-1">
-              Studio Manager Panel
+              Sales & Order Control
             </h1>
+            <p className="text-[10px] text-brand-dark/50 mt-2 max-w-xl">
+              Manage products, sales, and fulfillment from one simple dashboard.
+            </p>
           </div>
-          <button 
-            onClick={fetchAdminData}
-            className="flex items-center gap-1.5 px-4 py-2 border border-brand-dark/15 bg-white text-[9px] font-bold uppercase tracking-widest text-brand-dark hover:border-brand-dark transition-colors focus:outline-none w-fit"
-          >
-            <RefreshCcw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
-            Sync Database
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <button 
+              onClick={fetchAdminData}
+              className="flex items-center gap-1.5 px-4 py-2 border border-brand-dark/15 bg-white text-[9px] font-bold uppercase tracking-widest text-brand-dark hover:border-brand-dark transition-colors focus:outline-none w-fit"
+            >
+              <RefreshCcw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
+              Sync Database
+            </button>
+            <button
+              onClick={logout}
+              className="flex items-center gap-1.5 px-4 py-2 border border-brand-dark/15 bg-brand-burgundy text-[9px] font-bold uppercase tracking-widest text-white hover:bg-brand-dark transition-colors focus:outline-none w-fit"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              Sign Out
+            </button>
+          </div>
         </div>
 
         {/* Workspace layout grid */}
@@ -536,7 +551,7 @@ export default function AdminPanel() {
                 {/* ========================================== */}
                 {activeTab === "dashboard" && (
                   <div className="space-y-8">
-                    <h3 className="font-serif text-2xl font-light text-brand-dark">Business Intelligence metrics</h3>
+                    <h3 className="font-serif text-2xl font-light text-brand-dark">Sales dashboard</h3>
                     
                     {/* Stats counters */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -558,11 +573,34 @@ export default function AdminPanel() {
                       </div>
                     </div>
 
+                    {/* Quick action and queue grid */}
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="bg-white border border-brand-dark/5 p-5 shadow-xs">
+                        <p className="text-[8px] uppercase tracking-[0.2em] text-brand-dark/45 mb-2">Open order queue</p>
+                        <p className="font-serif text-3xl text-brand-dark font-light">{pendingOrders.length}</p>
+                        <p className="text-[10px] text-brand-dark/60 mt-3">Orders still in progress</p>
+                      </div>
+                      <div className="bg-white border border-brand-dark/5 p-5 shadow-xs">
+                        <p className="text-[8px] uppercase tracking-[0.2em] text-brand-dark/45 mb-2">Low stock alerts</p>
+                        <p className="font-serif text-3xl text-brand-burgundy font-light">{lowStockItems.length}</p>
+                        <p className="text-[10px] text-brand-dark/60 mt-3">Products hitting reorder threshold</p>
+                      </div>
+                      <div className="bg-white border border-brand-dark/5 p-5 shadow-xs">
+                        <p className="text-[8px] uppercase tracking-[0.2em] text-brand-dark/45 mb-2">Next delivery slot</p>
+                        <p className="font-serif text-3xl text-brand-sage font-semibold">
+                          {nextScheduledDelivery ? nextScheduledDelivery.deliverySlot : "None"}
+                        </p>
+                        <p className="text-[10px] text-brand-dark/60 mt-3">
+                          {nextScheduledDelivery ? `Due ${nextScheduledDelivery.deliveryDate}` : "No deliveries today"}
+                        </p>
+                      </div>
+                    </div>
+
                     {/* Graphics grid */}
                     <div className="grid md:grid-cols-2 gap-6">
                       {/* Top Compositions */}
                       <div className="bg-white border border-brand-dark/5 p-6 space-y-4">
-                        <h4 className="font-serif text-lg font-light border-b border-brand-dark/5 pb-2">Best-Selling Compositions</h4>
+                        <h4 className="font-serif text-lg font-light border-b border-brand-dark/5 pb-2">Top sellers</h4>
                         {analytics.bestSellers.length === 0 ? (
                           <p className="text-xs font-body-serif italic text-brand-dark/45 text-center py-6">No purchase records registered yet.</p>
                         ) : (
@@ -582,7 +620,7 @@ export default function AdminPanel() {
 
                       {/* Category Sales distributions */}
                       <div className="bg-white border border-brand-dark/5 p-6 space-y-4">
-                        <h4 className="font-serif text-lg font-light border-b border-brand-dark/5 pb-2">Category Sales Distribution</h4>
+                        <h4 className="font-serif text-lg font-light border-b border-brand-dark/5 pb-2">Sales by category</h4>
                         {Object.keys(analytics.categorySales).length === 0 ? (
                           <p className="text-xs font-body-serif italic text-brand-dark/45 text-center py-6">No sales logs parsed yet.</p>
                         ) : (
@@ -872,7 +910,7 @@ export default function AdminPanel() {
                       <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-brand-dark/5 pb-3">
                         <div>
                           <h4 className="font-serif text-lg font-light">Delivery Capacity Slot Scheduler</h4>
-                          <p className="text-[10px] text-brand-dark/50">Manage local courier schedules and daily windows.</p>
+                          <p className="text-[10px] text-brand-dark/50">See today’s delivery schedule and pending orders at a glance.</p>
                         </div>
                         <input
                           type="date"
@@ -933,7 +971,7 @@ export default function AdminPanel() {
 
                     {/* Order desk table */}
                     <div className="space-y-4">
-                      <h3 className="font-serif text-2xl font-light text-brand-dark">Commission Requests Desk</h3>
+                      <h3 className="font-serif text-2xl font-light text-brand-dark">Order queue</h3>
                       <div className="bg-white border border-brand-dark/5 p-4 overflow-x-auto shadow-xs">
                         <table className="w-full min-w-[700px] border-collapse">
                           <thead>
