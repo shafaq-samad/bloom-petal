@@ -1,0 +1,6 @@
+{
+  "name": "Bloom & Petal",
+  "description": "Fresh, simple bouquets and floral gifts for everyday and special moments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-body-serif: "Cormorant Garamond", serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  
+  --color-brand-blush: #F3ECE3;
+  --color-brand-cream: #FBFBF9;
+  --color-brand-sage: #5E6E58;
+  --color-brand-burgundy: #7A2B2D;
+  --color-brand-dark: #111111;
+  --color-brand-gold: #C2A478;
+}
+
+/* Custom global styles for smooth scrolling and clean appearance */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: var(--color-brand-cream);
+  color: var(--color-brand-dark);
+}
+
+body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p, li, label {
+  line-height: 1.75;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+button, a, input, textarea, select {
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbar for an editorial feel */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-brand-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(18, 18, 18, 0.1);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-sage);
+}
+
+/* Custom border classes and minimalist styling */
+.editorial-border {
+  border-color: rgba(18, 18, 18, 0.08);
+}
+
+.editorial-divider {
+  background-color: rgba(18, 18, 18, 0.08);
+}
+
+/* Luxury card and framing styles */
+.editorial-frame {
+  border: 1px solid rgba(18, 18, 18, 0.08);
+  padding: 0.5rem;
+  background: white;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.editorial-frame:hover {
+  border-color: var(--color-brand-gold);
+  transform: translateY(-4px);
+}
+
+/* Micro-animations */
+@keyframes gold-drift {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+.gold-dust {
+  animation: gold-drift 20s linear infinite;
+}
+
+/* Custom cursor tracker styling */
+.custom-cursor {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-brand-gold);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease-out;
+  will-change: transform, background-color;
+}
+
+.custom-cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(194, 164, 120, 0.3);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease-out;
+  will-change: transform, border-color;
+}
+
+/* Style Calendar Pickers natively to match our design */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(12%) sepia(12%) saturate(300%) hue-rotate(320deg) brightness(95%) contrast(90%);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Scrollbar hide helper for custom tag carousels */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
