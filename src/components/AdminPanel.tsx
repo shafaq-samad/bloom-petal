@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { api } from "../lib/api";
 import { 
   BarChart2, ShoppingCart, Archive, Calendar, Tag, MessageSquare, 
   Settings, PenTool, Plus, Edit2, Trash2, Printer, Check, X, AlertTriangle, RefreshCcw
@@ -127,31 +128,31 @@ export default function AdminPanel() {
 
     try {
       // Products
-      const prodRes = await fetch("/api/products");
+      const prodRes = await fetch(api("/api/products"));
       if (prodRes.ok) setProducts(await prodRes.json());
 
       // Orders
-      const orderRes = await fetch("/api/orders", { headers });
+      const orderRes = await fetch(api("/api/orders"), { headers });
       if (orderRes.ok) setOrders(await orderRes.json());
 
       // Discounts
-      const discRes = await fetch("/api/discounts", { headers });
+      const discRes = await fetch(api("/api/discounts"), { headers });
       if (discRes.ok) setDiscounts(await discRes.json());
 
       // Reviews
-      const revRes = await fetch("/api/reviews", { headers });
+      const revRes = await fetch(api("/api/reviews"), { headers });
       if (revRes.ok) setReviews(await revRes.json());
 
       // Blog posts
-      const blogRes = await fetch("/api/blog");
+      const blogRes = await fetch(api("/api/blog"));
       if (blogRes.ok) setBlogPosts(await blogRes.json());
 
       // Analytics
-      const analRes = await fetch("/api/analytics", { headers });
+      const analRes = await fetch(api("/api/analytics"), { headers });
       if (analRes.ok) setAnalytics(await analRes.json());
 
       // CMS
-      const cmsRes = await fetch("/api/cms/homepage");
+      const cmsRes = await fetch(api("/api/cms/homepage"));
       if (cmsRes.ok) setCmsForm(await cmsRes.json());
 
     } catch (error) {
@@ -230,7 +231,7 @@ export default function AdminPanel() {
   const handleUpdateOrderStatus = async (id: string, status: string) => {
     const token = localStorage.getItem("bloom_auth_token");
     try {
-      const res = await fetch(`/api/orders/${id}/status`, {
+      const res = await fetch(api(`/api/orders/${id}/status`), {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status })
@@ -272,7 +273,7 @@ export default function AdminPanel() {
   const handleDeleteDiscount = async (id: string) => {
     const token = localStorage.getItem("bloom_auth_token");
     try {
-      const res = await fetch(`/api/discounts/${id}`, {
+      const res = await fetch(api(`/api/discounts/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -286,7 +287,7 @@ export default function AdminPanel() {
   const handleModerateReview = async (id: string, approved: boolean) => {
     const token = localStorage.getItem("bloom_auth_token");
     try {
-      const res = await fetch(`/api/reviews/${id}/approve`, {
+      const res = await fetch(api(`/api/reviews/${id}/approve`), {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ approved })
@@ -302,7 +303,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem("bloom_auth_token");
     try {
-      const res = await fetch("/api/cms/homepage", {
+      const res = await fetch(api("/api/cms/homepage"), {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(cmsForm)
@@ -342,7 +343,7 @@ export default function AdminPanel() {
     if (!confirm("Delete this journal post?")) return;
     const token = localStorage.getItem("bloom_auth_token");
     try {
-      const res = await fetch(`/api/blog/${id}`, {
+      const res = await fetch(api(`/api/blog/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });

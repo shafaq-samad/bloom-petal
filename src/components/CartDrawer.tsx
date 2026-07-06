@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { api } from "../lib/api";
 import { X, Trash2, ShoppingBag, Plus, Minus, ArrowRight, Sparkles, Check, Tag, User, MapPin } from "lucide-react";
 import { Product } from "../types";
 
@@ -584,7 +585,7 @@ export default function CartDrawer() {
         selectedSize: item.selectedSize
       }));
 
-      const res = await fetch("/api/orders", {
+      const res = await fetch(api("/api/orders"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

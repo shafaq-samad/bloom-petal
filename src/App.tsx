@@ -10,6 +10,7 @@ import Newsletter from "./components/Newsletter";
 import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
 import { useAuth } from "./context/AuthContext";
+import { api } from "./lib/api";
 
 // Dynamic Views
 import JournalView from "./components/JournalView";
@@ -44,7 +45,7 @@ export default function App() {
     const fetchCms = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch("/api/cms/homepage");
+        const res = await fetch(api("/api/cms/homepage"));
         if (res.ok) {
           const data = await res.json();
           setCms(data);

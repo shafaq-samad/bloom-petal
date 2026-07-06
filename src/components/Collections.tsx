@@ -3,6 +3,7 @@ import { PRODUCTS } from "../data";
 import { Product } from "../types";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { api } from "../lib/api";
 import { Star, ShoppingBag, Heart, Sparkles, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -21,7 +22,7 @@ export default function Collections() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch(api("/api/products"));
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {

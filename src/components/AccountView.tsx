@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth, RecipientProfile } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { api } from "../lib/api";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   LogOut, MapPin, Gift, Clipboard, RefreshCw, 
@@ -69,7 +70,7 @@ export default function AccountView() {
       }
 
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch(api("/api/products"));
         if (res.ok) {
           const allProducts = await res.json();
           setFavoriteProducts(
@@ -87,7 +88,7 @@ export default function AccountView() {
     setLoadingOrders(true);
     try {
       const token = localStorage.getItem("bloom_auth_token");
-      const res = await fetch("/api/orders", {
+      const res = await fetch(api("/api/orders"), {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {

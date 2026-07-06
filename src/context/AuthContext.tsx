@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { api } from "../lib/api";
 
 export interface RecipientProfile {
   name: string;
@@ -40,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       try {
-        const response = await fetch("/api/auth/me", {
+        const response = await fetch(api("/api/auth/me"), {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -70,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(api("/api/auth/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -91,7 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch(api("/api/auth/register"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password })
@@ -119,7 +120,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateAddresses = async (addresses: string[]) => {
     if (!token) return false;
     try {
-      const response = await fetch("/api/auth/profile", {
+      const response = await fetch(api("/api/auth/profile"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateRecipients = async (recipients: RecipientProfile[]) => {
     if (!token) return false;
     try {
-      const response = await fetch("/api/auth/profile", {
+      const response = await fetch(api("/api/auth/profile"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

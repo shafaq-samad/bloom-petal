@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { api } from "../lib/api";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowLeft, BookOpen, Clock, User, Calendar } from "lucide-react";
 
@@ -21,7 +22,7 @@ export default function JournalView() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch("/api/blog");
+        const res = await fetch(api("/api/blog"));
         if (res.ok) {
           const data = await res.json();
           setPosts(data);
