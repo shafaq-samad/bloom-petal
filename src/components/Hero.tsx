@@ -35,7 +35,7 @@ export default function Hero({ onShopClick, onAboutClick }: HeroProps) {
   return (
     <section
       id="hero"
-      className="relative min-h-screen bg-brand-cream overflow-hidden flex items-center justify-center"
+      className="relative min-h-screen bg-brand-cream overflow-hidden flex items-center justify-center pt-0 md:pt-16"
     >
       {/* Floating Gold Dust Backdrop */}
       <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
@@ -74,7 +74,7 @@ export default function Hero({ onShopClick, onAboutClick }: HeroProps) {
       </div>
 
       {/* Main Content Container */}
-      <div className="relative z-20 w-full max-w-7xl px-6 md:px-12 py-28 lg:py-0 flex items-center min-h-screen">
+      <div className="relative z-20 w-full max-w-7xl px-6 md:px-12 py-0 lg:py-0 flex items-center min-h-screen">
         <div className="grid w-full items-center gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12">
           
           {/* Text Content Column */}
@@ -92,12 +92,12 @@ export default function Hero({ onShopClick, onAboutClick }: HeroProps) {
                 {heroTitle}
               </h1>
 
-              <p className="max-w-xl text-sm sm:text-base font-body-serif font-light leading-relaxed text-brand-dark/80 pt-2">
+              <p className="max-w-xl text-sm sm:text-base font-body-serif font-light leading-relaxed text-brand-dark/80 pt-0">
                 {heroSubtitle}
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-0">
               <button
                 id="hero-shop-now-btn"
                 type="button"
@@ -121,7 +121,7 @@ export default function Hero({ onShopClick, onAboutClick }: HeroProps) {
             </div>
 
             {/* Micro stats banner */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-brand-dark/5 max-w-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-brand-dark/5 max-w-xl">
               <div className="rounded-none border border-brand-dark/10 bg-white p-4 text-sm text-brand-dark">
                 <strong className="block text-brand-dark font-semibold">Sustainably sourced</strong>
                 Thoughtfully chosen blooms from trusted growers.

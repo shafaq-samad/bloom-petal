@@ -42,12 +42,12 @@ export default function Occasions({ onExploreClick, onInquireClick }: OccasionsP
     <section
       id="occasions"
       ref={sectionRef}
-      className="relative py-32 bg-brand-cream border-t border-brand-dark/5 scroll-mt-20 overflow-hidden"
+      className="relative py-20 bg-brand-cream border-t border-brand-dark/5 scroll-mt-20 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-12 relative z-10">
         
         {/* Section Title */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div className="max-w-2xl text-left space-y-4">
             <div className="flex items-center gap-2">
               <span className="h-px w-8 bg-brand-gold" />
@@ -133,7 +133,7 @@ export default function Occasions({ onExploreClick, onInquireClick }: OccasionsP
         <motion.div
           animate={isSectionVisible ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-28 bg-white border border-brand-dark/5 p-8 md:p-14 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden"
+          className="mt-10 bg-white border border-brand-dark/5 p-8 md:p-14 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden"
         >
           {/* Subtle logo silhouette in background */}
           <div className="absolute right-0 bottom-0 w-44 h-44 opacity-5 text-brand-sage pointer-events-none translate-x-12 translate-y-12">

@@ -25,7 +25,7 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-24 bg-brand-cream overflow-hidden border-t border-brand-blush/20 scroll-mt-20"
+      className="relative py-10 bg-brand-cream overflow-hidden border-t border-brand-blush/20 scroll-mt-20"
     >
       {/* Decorative large geometric accent */}
       <div className="absolute -left-16 top-10 h-96 w-96 bg-brand-blush/30 opacity-40 blur-3xl pointer-events-none" />

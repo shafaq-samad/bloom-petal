@@ -6,9 +6,13 @@ import { motion, AnimatePresence } from "motion/react";
 
 interface NavbarProps {
   onNavClick: (id: string) => void;
+  hasBanner: boolean;
 }
 
-export default function Navbar({ onNavClick }: NavbarProps) {
+export default function Navbar({
+  onNavClick,
+  hasBanner,
+}: NavbarProps) {
   const { toggleCart, cartCount, favoriteCount } = useCart();
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,7 +20,7 @@ export default function Navbar({ onNavClick }: NavbarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled(window.scrollY > 48);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -42,10 +46,12 @@ export default function Navbar({ onNavClick }: NavbarProps) {
     <>
       <header
         id="app-header"
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-700 ${
-          isScrolled
-            ? "bg-brand-cream/90 backdrop-blur-md border-b border-brand-dark/5 py-4 shadow-xs"
-            : "bg-transparent py-6"
+        className={`fixed left-0 right-0 z-40 transition-all duration-700 ${
+    isScrolled ? "top-0" : hasBanner ? "top-[44px]" : "top-2"
+  } ${
+    isScrolled
+      ? "bg-brand-cream/95 backdrop-blur-md border-b py-3"
+      : "bg-brand-cream/95 border-b border-brand-dark/10 py-3"
         }`}
       >
         <div className="mx-auto max-w-7xl px-6 md:px-12">
@@ -63,7 +69,7 @@ export default function Navbar({ onNavClick }: NavbarProps) {
             </button>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8" aria-label="Desktop menu">
+            <nav className="hidden md:flex items-center gap-14" aria-label="Desktop menu">
               {navLinks.map((link) => (
                 <button
                   key={link.id}

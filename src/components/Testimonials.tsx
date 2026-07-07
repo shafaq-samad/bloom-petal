@@ -57,7 +57,7 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="relative py-24 bg-brand-cream border-t border-brand-blush/20 overflow-hidden scroll-mt-20"
+      className="relative py-24 bg-brand-cream border-t border-brand-blush/20 overflow-hidden scroll-mt-10"
     >
       {/* Dynamic background shapes */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-blush/20 rounded-full blur-3xl pointer-events-none opacity-40 z-0" />
@@ -65,7 +65,7 @@ export default function Testimonials() {
       <div className="mx-auto max-w-5xl px-6 md:px-12 relative z-10 text-center">
         
         {/* Header */}
-        <div className="max-w-2xl mx-auto space-y-4 mb-16">
+        <div className="max-w-2xl mx-auto space-y-4 mb-0">
           <div className="flex items-center justify-center gap-2">
             <span className="h-px w-6 bg-brand-sage" />
             <p className="text-[10px] font-bold tracking-widest text-brand-sage uppercase">What Our Clients Say</p>

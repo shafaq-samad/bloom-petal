@@ -111,12 +111,12 @@ export default function Collections() {
     <section
       id="collections"
       ref={sectionRef}
-      className="relative py-32 bg-brand-cream border-t border-brand-dark/5 scroll-mt-20 overflow-hidden"
+      className="relative py-20 bg-brand-cream border-t border-brand-dark/5 scroll-mt-20 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-12 relative z-10">
         
         {/* Section Header */}
-        <div className="text-left max-w-3xl space-y-4 mb-20">
+        <div className="text-left max-w-3xl space-y-4 mb-10">
           <motion.div
             animate={isSectionVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
             transition={{ duration: 0.6 }}
@@ -170,7 +170,7 @@ export default function Collections() {
         </div>
 
         {/* Swipeable Category Filters Row */}
-        <div className="w-full overflow-x-auto scrollbar-none mb-24 -mx-6 px-6 md:mx-0 md:px-0">
+        <div className="w-full overflow-x-auto scrollbar-none mb-10 -mx-6 px-6 md:mx-0 md:px-0">
           <div className="flex whitespace-nowrap gap-3 md:justify-start min-w-max pb-2">
             {categories.map((category) => (
               <button

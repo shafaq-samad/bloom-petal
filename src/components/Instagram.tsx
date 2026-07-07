@@ -33,12 +33,12 @@ export default function Gallery() {
   return (
     <section
       id="gallery"
-      className="relative py-24 bg-brand-cream border-t border-brand-blush/20 scroll-mt-20"
+      className="relative py-10 bg-brand-cream border-t border-brand-blush/20 scroll-mt-20"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-12 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
+        <div className="text-center max-w-2xl mx-auto space-y-2 mb-05">
           <div className="flex items-center justify-center gap-2">
             <Instagram className="h-4 w-4 text-brand-sage" />
             <p className="text-[10px] font-bold tracking-widest text-brand-sage uppercase">From The Studio</p>
@@ -46,7 +46,7 @@ export default function Gallery() {
           <h2 className="font-serif text-4xl md:text-5xl font-light tracking-tight text-brand-dark">
             Follow Along on <span className="italic text-brand-burgundy font-normal">Instagram</span>
           </h2>
-          <p className="text-brand-dark/60 text-sm font-sans max-w-lg mx-auto">
+          <p className="text-brand-dark/60 text-sm font-sans max-w-lg mx-auto mb-10">
             A behind-the-scenes look at new arrivals, ongoing projects, and life at the studio. Follow us at <span className="font-semibold text-brand-burgundy">@bloomandpetal</span>.
           </p>
         </div>

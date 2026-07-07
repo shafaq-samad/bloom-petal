@@ -141,7 +141,7 @@ export default function App() {
 
       {/* Seasonal Alert Ticker Banner */}
       {seasonalAlert && currentView === "#home" && (
-        <div className="bg-brand-burgundy text-white text-[9px] font-bold uppercase tracking-[0.2em] py-2 text-center relative z-50 overflow-hidden select-none print:hidden">
+        <div className="bg-brand-burgundy text-white text-[9px] font-bold uppercase tracking-[0.2em] py-3 text-center relative z-50 overflow-hidden select-none print:hidden">
           <div className="inline-block animate-pulse">
             {seasonalAlert}
           </div>
@@ -150,7 +150,10 @@ export default function App() {
 
       {/* Sticky Header */}
       <div className="print:hidden">
-        <Navbar onNavClick={handleNavClick} />
+<Navbar
+  onNavClick={handleNavClick}
+  hasBanner={!!(seasonalAlert && currentView === "#home")}
+/>
       </div>
 
       {/* Dynamic Main Views Content */}
