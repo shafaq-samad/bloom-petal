@@ -87,25 +87,7 @@ export default function Collections() {
     return () => observer.disconnect();
   }, []);
 
-  // Custom staggered sizing layout class names for a high-fashion portfolio grid
-  const getCardLayoutClass = (index: number) => {
-    switch (index % 6) {
-      case 0:
-        return "md:col-span-1 md:translate-y-0";
-      case 1:
-        return "md:col-span-1 md:translate-y-16";
-      case 2:
-        return "md:col-span-1 md:translate-y-8";
-      case 3:
-        return "md:col-span-2 lg:col-span-2 md:translate-y-4";
-      case 4:
-        return "md:col-span-1 md:translate-y-20";
-      case 5:
-        return "md:col-span-1 md:translate-y-0";
-      default:
-        return "";
-    }
-  };
+  const getCardLayoutClass = () => "";
 
   return (
     <section
@@ -202,7 +184,6 @@ export default function Collections() {
                 const selectedSize = selectedSizes[productId] || "Classic";
                 const displayedPrice = getProductPrice(product);
                 const layoutClass = getCardLayoutClass(index);
-                const isWideCard = index % 6 === 3;
                 const isSoldOut = product.stock === 0;
                 const isLowStock = product.stock > 0 && product.stock <= (product.lowStockThreshold || 5);
 
@@ -217,7 +198,7 @@ export default function Collections() {
                     className={`group bg-transparent overflow-hidden flex flex-col h-full ${layoutClass} ${isSoldOut ? 'opacity-75' : ''}`}
                   >
                     {/* Image & Wishlist */}
-                    <div className={`relative overflow-hidden bg-brand-cream border border-brand-dark/5 shadow-xs shrink-0 ${isWideCard ? 'aspect-[16/10]' : 'aspect-[3/4]'}`}>
+                    <div className="relative overflow-hidden bg-brand-cream border border-brand-dark/5 shadow-xs shrink-0 aspect-[3/4]">
                       <img
                         src={product.image}
                         alt={product.name}
