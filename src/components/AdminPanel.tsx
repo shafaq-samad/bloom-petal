@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../lib/api";
 import { 
-  BarChart2, ShoppingCart, Archive, Logout, Calendar, Tag, MessageSquare, 
+  BarChart2, ShoppingCart, Archive, LogOut, Calendar, Tag, MessageSquare, 
   Settings, PenTool, Plus, Edit2, Trash2, Printer, Check, X, AlertTriangle, RefreshCcw
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
