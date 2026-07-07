@@ -189,7 +189,7 @@ export default function AdminPanel() {
     if (!confirm("Are you sure you want to delete this composition?")) return;
     const token = localStorage.getItem("bloom_auth_token");
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(api(`/api/products/${id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -203,7 +203,7 @@ export default function AdminPanel() {
     if (newStock < 0) return;
     const token = localStorage.getItem("bloom_auth_token");
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(api(`/api/products/${id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ stock: newStock })
