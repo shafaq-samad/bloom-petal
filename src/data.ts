@@ -81,87 +81,87 @@ export const OCCASIONS: Occasion[] = [
     name: "Weddings & Events",
     slug: "weddings",
     description: "Elegant floral styling for weddings, dinners, and large celebrations that deserve a special touch.",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600"
+    image: "https://i.pinimg.com/736x/d0/b8/ef/d0b8efca5fa51c2927e4ff3b41bf97df.jpg?auto=format&fit=crop&q=80&w=600"
   },
   {
     id: "occ-2",
     name: "Birthdays & Gifting",
     slug: "birthdays",
     description: "Beautiful bouquets and arrangements that make the perfect gift, whatever the occasion.",
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=600"
+    image: "https://perfectgiftadda.com/wp-content/uploads/2025/12/IMG_4426-scaled.jpeg?auto=format&fit=crop&q=80&w=600"
   },
   {
     id: "occ-3",
     name: "Anniversary & Romance",
     slug: "anniversaries",
     description: "Soft, romantic arrangements that bring extra warmth and charm to your most intimate moments.",
-    image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=600"
+    image: "https://cdn.bloomsflora.com/uploads/product/bloomsflora/FEB2026/13566-1770097070554.webp?auto=format&fit=crop&q=80&w=600"
   },
   {
     id: "occ-4",
     name: "Sympathy & Condolences",
     slug: "sympathy",
     description: "Calm and thoughtful arrangements designed to bring comfort and quiet beauty in difficult times.",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&q=80&w=600"
+    image: "https://www.florismdeart.com.my/cdn/shop/files/IMG_4941_1.jpg?v=1684985445&width=1946?auto=format&fit=crop&q=80&w=600"
   }
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: "t-1",
-    name: "Sarah L.",
+    name: "Sarah",
     role: "Event Planner",
     quote: "The team at Bloom & Petal doesn't just arrange flowers; they create art. Every installation for our events has been a masterpiece. I can't recommend them enough.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150"
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAma_6oCxRdvCD8lS29e1X0lySv1pfr2B-rkiif-1E8J6LlA3_SB90wvo&s=10?auto=format&fit=crop&q=80&w=150"
   },
   {
     id: "t-2",
-    name: "David Chen",
+    name: "David",
     role: "Office Manager",
     quote: "Our office subscription has completely transformed the space. The unique, natural style of each arrangement is a constant source of joy and inspiration for our team.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150"
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkatwW9_oN0_5Fd5IkFdB5SAG3lYfkyrsO5EdMtOrnh2jEGdbZsswqq4U&s=10?auto=format&fit=crop&q=80&w=150"
   },
   {
     id: "t-3",
-    name: "Emily R.",
+    name: "Emily",
     role: "Happy Customer",
     quote: "I'm always blown away by the quality and artistry. Their bouquets are so different from the usual arrangements you see everywhere else. A truly premium experience!",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+    image: "https://cdn-icons-png.flaticon.com/512/16783/16783119.png?auto=format&fit=crop&q=80&w=150"
   }
 ];
 
 export const INSTAGRAM_GALLERY: GalleryItem[] = [
   {
     id: "ig-1",
-    url: "https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?auto=format&fit=crop&q=80&w=400",
+    url: "https://substackcdn.com/image/fetch/$s_!5DOX!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa84b3988-fda0-4729-aed4-b09e85e99fa7_1152x2048.jpeg?auto=format&fit=crop&q=80&w=400",
     caption: "Mornings at the studio, sorting fresh eucalyptus for today's bouquets."
   },
   {
     id: "ig-2",
-    url: "https://images.unsplash.com/photo-1507504038482-7621c27decfe?auto=format&fit=crop&q=80&w=400",
+    url: "https://susanrushton.net/wp-content/uploads/2015/09/a-shropshire-lad.jpg?auto=format&fit=crop&q=80&w=400",
     caption: "The delicate perfection of our signature peach English Garden Rose."
   },
   {
     id: "ig-3",
-    url: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&q=80&w=400",
+    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9fvDFMnTvC3Yv51WabIJBQAgdm0gRXAkI5w27f1deknVFWqzEDVCTHcU&s=10?auto=format&fit=crop&q=80&w=400",
     caption: "Hand-crafting a custom 'Meadow' bouquet for an afternoon delivery."
   },
   {
     id: "ig-4",
-    url: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&q=80&w=400",
+    url: "https://img.freepik.com/premium-photo/flower-shop-interior-with-wooden-counter-decorated-with-small-pumpkins-vases-plants-background-shows-floral-arrangements-bouquets-baskets-filled-with-colorful-flowers-soft-sunlight_206268-13841.jpg?auto=format&fit=crop&q=80&w=400",
     caption: "Golden light hitting the assembly table in our cozy workshop."
   },
   {
     id: "ig-5",
-    url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=400",
+    url: "https://i.pinimg.com/736x/9d/8a/c3/9d8ac3ae9939ffcebe1fa676bf6e516e.jpg?auto=format&fit=crop&q=80&w=400",
     caption: "Custom tablescapes for a quiet, intimate garden celebration."
   },
   {
     id: "ig-6",
-    url: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&q=80&w=400",
+    url: "https://www.kukkaflowers.com/cdn/shop/products/Twilight_Blue_Flowers_Corsage.jpg?v=1640804369?auto=format&fit=crop&q=80&w=400",
     caption: "Fresh thistles and ranunculus waiting to find their perfect spot in a new design."
   }
 ];
