@@ -158,7 +158,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem("bloom_auth_token");
     const method = editingProduct?._id ? "PUT" : "POST";
-    const url = editingProduct?._id ? `/api/products/${editingProduct._id}` : "/api/products";
+    const url = api(editingProduct?._id ? `/api/products/${editingProduct._id}` : "/api/products");
 
     const body = {
       ...editingProduct,
@@ -236,7 +236,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem("bloom_auth_token");
     const method = editingDiscount?._id ? "PUT" : "POST";
-    const url = editingDiscount?._id ? `/api/discounts/${editingDiscount._id}` : "/api/discounts";
+    const url = api(editingDiscount?._id ? `/api/discounts/${editingDiscount._id}` : "/api/discounts");
 
     const body = {
       ...editingDiscount,
@@ -292,7 +292,7 @@ export default function AdminPanel() {
     e.preventDefault();
     const token = localStorage.getItem("bloom_auth_token");
     const method = editingPost?._id ? "PUT" : "POST";
-    const url = editingPost?._id ? `/api/blog/${editingPost._id}` : "/api/blog";
+    const url = api(editingPost?._id ? `/api/blog/${editingPost._id}` : "/api/blog");
 
     try {
       const res = await fetch(url, {
