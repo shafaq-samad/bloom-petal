@@ -14,7 +14,6 @@ import {
   Order,
   DiscountCode,
   Review,
-  Cms,
   BlogPost
 } from "./server/models";
 
@@ -166,21 +165,6 @@ Flower care tips:
       console.log("Seeded default botanical journals.");
     }
 
-    // 5. Seed CMS content
-    const cmsCount = await Cms.countDocuments();
-    if (cmsCount === 0) {
-      await Cms.create({
-        key: "homepage",
-        value: {
-          heroTitle: "Fresh flowers for your home and special days.",
-          heroSubtitle: "Lovely bouquets and easy-to-order gifts for any occasion.",
-          heroImage: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&q=80&w=1600",
-          seasonalAlert: "Mother's Day coming up — order early for best delivery times.",
-          aboutText: "Bloom & Petal makes simple, beautiful bouquets for homes and gifts. We use seasonal flowers and put care into each arrangement so they feel personal and easy to enjoy."
-        }
-      });
-      console.log("Seeded homepage CMS settings.");
-    }
 
   } catch (error) {
     console.error("Error seeding database:", error);
@@ -636,34 +620,7 @@ app.put("/api/reviews/:id/approve", authenticateToken, requireAdmin, async (req:
   }
 });
 
-// --- 6. CMS SYSTEM ENDPOINTS ---
-app.get("/api/cms/:key", async (req: Request, res: Response) => {
-  try {
-    const config = await Cms.findOne({ key: req.params.key });
-    if (!config) {
-       res.status(404).json({ message: "CMS Key Configuration not found" });
-       return;
-    }
-    res.json(config.value);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-app.put("/api/cms/:key", authenticateToken, requireAdmin, async (req: Request, res: Response) => {
-  try {
-    const updatedCms = await Cms.findOneAndUpdate(
-      { key: req.params.key },
-      { value: req.body },
-      { new: true, upsert: true }
-    );
-    res.json(updatedCms.value);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// --- 7. BOTANICAL JOURNAL / BLOG ENDPOINTS ---
+// --- 6. BOTANICAL JOURNAL / BLOG ENDPOINTS ---
 app.get("/api/blog", async (req: Request, res: Response) => {
   try {
     const posts = await BlogPost.find({}).sort({ publishedAt: -1 });

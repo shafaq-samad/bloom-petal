@@ -5,14 +5,17 @@ import { ArrowDown, Sparkles } from "lucide-react";
 interface HeroProps {
   onShopClick?: () => void;
   onAboutClick?: () => void;
-  cms?: {
-    heroTitle?: string;
-    heroSubtitle?: string;
-    heroImage?: string;
-  };
 }
 
-export default function Hero({ onShopClick, onAboutClick, cms }: HeroProps) {
+export default function Hero({ onShopClick, onAboutClick }: HeroProps) {
+  const heroTitle = (
+    <>
+      <span className="block">Fresh flowers</span>
+      <span className="block font-body-serif font-normal text-brand-burgundy">made easy</span>
+    </>
+  );
+  const heroSubtitle = "Beautiful bouquets, hand-picked blooms, and fast delivery so gifting feels effortless.";
+  const heroImage = "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&q=80&w=1600";
   // Ultra-fine gold dust particles drifting upwards slowly
   const particles = useMemo(
     () =>
@@ -86,18 +89,11 @@ export default function Hero({ onShopClick, onAboutClick, cms }: HeroProps) {
 
             <div className="space-y-6">
               <h1 className="text-5xl sm:text-6xl xl:text-7xl font-serif font-normal leading-tight tracking-tight text-brand-dark">
-                {cms?.heroTitle ? (
-                  <span className="block">{cms.heroTitle}</span>
-                ) : (
-                  <>
-                    <span className="block">Fresh flowers</span>
-                    <span className="block font-body-serif font-normal text-brand-burgundy">made easy</span>
-                  </>
-                )}
+                {heroTitle}
               </h1>
 
               <p className="max-w-xl text-sm sm:text-base font-body-serif font-light leading-relaxed text-brand-dark/80 pt-2">
-                {cms?.heroSubtitle || "Beautiful bouquets, hand-picked blooms, and fast delivery so gifting feels effortless."}
+                {heroSubtitle}
               </p>
             </div>
 
@@ -152,10 +148,7 @@ export default function Hero({ onShopClick, onAboutClick, cms }: HeroProps) {
               {/* Primary Image Frame */}
               <div className="editorial-frame aspect-[5/6] overflow-hidden shadow-2xl relative min-h-[520px] md:min-h-[640px]">
                 <motion.img
-                  src={
-                    cms?.heroImage ||
-                    "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&q=80&w=1600"
-                  }
+                  src={heroImage}
                   alt="A bright bouquet of fresh flowers"
                   loading="eager"
                   className="h-full w-full object-cover"

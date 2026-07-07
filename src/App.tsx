@@ -10,7 +10,6 @@ import Newsletter from "./components/Newsletter";
 import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
 import { useAuth } from "./context/AuthContext";
-import { api } from "./lib/api";
 
 // Dynamic Views
 import JournalView from "./components/JournalView";
@@ -19,14 +18,7 @@ import AdminPanel from "./components/AdminPanel";
 
 export default function App() {
   const [currentView, setCurrentView] = useState<string>(() => window.location.hash || "#home");
-  const [isLoading, setIsLoading] = useState(true);
-  const [cms, setCms] = useState({
-    heroTitle: "",
-    heroSubtitle: "",
-    heroImage: "",
-    seasonalAlert: "",
-    aboutText: ""
-  });
+  const seasonalAlert = "Mother's Day coming up — order early for best delivery times.";
 
   // Watch hash changes
   useEffect(() => {
@@ -38,25 +30,6 @@ export default function App() {
 
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
-
-  // Fetch CMS settings
-  useEffect(() => {
-    const fetchCms = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(api("/api/cms/homepage"));
-        if (res.ok) {
-          const data = await res.json();
-          setCms(data);
-        }
-      } catch (err) {
-        console.error("CMS failed to load, using default settings", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCms();
   }, []);
 
   // Set up React Refs for primary landing sections
@@ -167,10 +140,10 @@ export default function App() {
       />
 
       {/* Seasonal Alert Ticker Banner */}
-      {cms.seasonalAlert && currentView === "#home" && (
+      {seasonalAlert && currentView === "#home" && (
         <div className="bg-brand-burgundy text-white text-[9px] font-bold uppercase tracking-[0.2em] py-2 text-center relative z-50 overflow-hidden select-none print:hidden">
           <div className="inline-block animate-pulse">
-            {cms.seasonalAlert}
+            {seasonalAlert}
           </div>
         </div>
       )}
@@ -182,14 +155,7 @@ export default function App() {
 
       {/* Dynamic Main Views Content */}
       <main>
-        {isLoading && currentView === "#home" ? (
-          <div className="fixed inset-0 flex items-center justify-center bg-brand-cream z-50">
-            <div className="flex items-center gap-3">
-              <div className="h-6 w-6 border-2 border-brand-dark/10 border-t-brand-sage rounded-full animate-spin" />
-              <span className="font-serif text-brand-dark/60">Loading Studio...</span>
-            </div>
-          </div>
-        ) : currentView === "#admin" ? (
+        {currentView === "#admin" ? (
           <AdminPanel />
         ) : currentView === "#journal" ? (
           <JournalView />
@@ -200,7 +166,6 @@ export default function App() {
           <>
             <div ref={sectionRefs.hero}>
               <Hero
-                cms={cms}
                 onShopClick={() => handleNavClick("collections")}
                 onAboutClick={() => handleNavClick("about")}
               />
@@ -215,7 +180,7 @@ export default function App() {
               />
             </div>
             <div ref={sectionRefs.about}>
-              <About cms={cms} />
+              <About />
             </div>
             <div ref={sectionRefs.testimonials}>
               <Testimonials />

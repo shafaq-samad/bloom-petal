@@ -79,7 +79,7 @@ export default function AdminPanel() {
   const { user, logout } = useAuth();
   
   // Tab control
-  const [activeTab, setActiveTab] = useState<"dashboard" | "catalog" | "inventory" | "orders" | "discounts" | "reviews" | "cms" | "blog">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "catalog" | "inventory" | "orders" | "discounts" | "reviews" | "blog">("dashboard");
 
   // Global database states
   const [products, setProducts] = useState<ProductItem[]>([]);
@@ -95,13 +95,6 @@ export default function AdminPanel() {
     repeatPurchaseRate: 0,
     categorySales: {},
     bestSellers: []
-  });
-  const [cmsForm, setCmsForm] = useState({
-    heroTitle: "",
-    heroSubtitle: "",
-    heroImage: "",
-    seasonalAlert: "",
-    aboutText: ""
   });
 
   const [loading, setLoading] = useState(true);
@@ -150,10 +143,6 @@ export default function AdminPanel() {
       // Analytics
       const analRes = await fetch(api("/api/analytics"), { headers });
       if (analRes.ok) setAnalytics(await analRes.json());
-
-      // CMS
-      const cmsRes = await fetch(api("/api/cms/homepage"));
-      if (cmsRes.ok) setCmsForm(await cmsRes.json());
 
     } catch (error) {
       console.error("Failed to load admin panel data:", error);
@@ -293,25 +282,6 @@ export default function AdminPanel() {
         body: JSON.stringify({ approved })
       });
       if (res.ok) fetchAdminData();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // CMS update
-  const handleSaveCms = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = localStorage.getItem("bloom_auth_token");
-    try {
-      const res = await fetch(api("/api/cms/homepage"), {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify(cmsForm)
-      });
-      if (res.ok) {
-        alert("Homepage editorial content saved to CMS!");
-        fetchAdminData();
-      }
     } catch (err) {
       console.error(err);
     }
@@ -517,7 +487,6 @@ export default function AdminPanel() {
               { id: "orders", label: "Orders Desk & Calendar", icon: Calendar },
               { id: "discounts", label: "Promotional Codes", icon: Tag },
               { id: "reviews", label: "Review Moderation", icon: MessageSquare },
-              { id: "cms", label: "Homepage CMS", icon: Settings },
               { id: "blog", label: "Journal Editor", icon: PenTool }
             ].map((tab) => {
               const Icon = tab.icon;
@@ -1235,79 +1204,7 @@ export default function AdminPanel() {
                 )}
 
                 {/* ========================================== */}
-                {/* 7. HOMEPAGE CMS EDIT VIEW */}
-                {/* ========================================== */}
-                {activeTab === "cms" && (
-                  <form onSubmit={handleSaveCms} className="bg-white border border-brand-dark/5 p-6 space-y-5 shadow-xs">
-                    <h3 className="font-serif text-2xl font-light text-brand-dark border-b border-brand-dark/5 pb-2">Homepage content CMS</h3>
-                    
-                    <div className="space-y-4 text-xs">
-                      <div>
-                        <label className="block text-[9px] font-bold uppercase tracking-widest text-brand-dark/60 mb-1.5">Hero Headline Title</label>
-                        <input
-                          type="text"
-                          required
-                          value={cmsForm.heroTitle}
-                          onChange={e => setCmsForm({ ...cmsForm, heroTitle: e.target.value })}
-                          className="w-full rounded-none border border-brand-dark/15 bg-white px-4 py-2.5 text-xs text-brand-dark focus:border-brand-gold focus:outline-none"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[9px] font-bold uppercase tracking-widest text-brand-dark/60 mb-1.5">Hero Subtitle Copy</label>
-                        <input
-                          type="text"
-                          required
-                          value={cmsForm.heroSubtitle}
-                          onChange={e => setCmsForm({ ...cmsForm, heroSubtitle: e.target.value })}
-                          className="w-full rounded-none border border-brand-dark/15 bg-white px-4 py-2.5 text-xs text-brand-dark focus:border-brand-gold focus:outline-none"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[9px] font-bold uppercase tracking-widest text-brand-dark/60 mb-1.5">Hero Image Banner URL</label>
-                        <input
-                          type="text"
-                          required
-                          value={cmsForm.heroImage}
-                          onChange={e => setCmsForm({ ...cmsForm, heroImage: e.target.value })}
-                          className="w-full rounded-none border border-brand-dark/15 bg-white px-4 py-2.5 text-xs text-brand-dark focus:border-brand-gold focus:outline-none"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[9px] font-bold uppercase tracking-widest text-brand-dark/60 mb-1.5">Seasonal banner Announcement Alert</label>
-                        <input
-                          type="text"
-                          value={cmsForm.seasonalAlert}
-                          onChange={e => setCmsForm({ ...cmsForm, seasonalAlert: e.target.value })}
-                          className="w-full rounded-none border border-brand-dark/15 bg-white px-4 py-2.5 text-xs text-brand-dark focus:border-brand-gold focus:outline-none"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[9px] font-bold uppercase tracking-widest text-brand-dark/60 mb-1.5">About Section Editorial Text Story</label>
-                        <textarea
-                          rows={4}
-                          required
-                          value={cmsForm.aboutText}
-                          onChange={e => setCmsForm({ ...cmsForm, aboutText: e.target.value })}
-                          className="w-full rounded-none border border-brand-dark/15 bg-white px-4 py-2.5 text-xs text-brand-dark focus:border-brand-gold focus:outline-none resize-none"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full rounded-none bg-brand-dark py-4 text-[9px] font-bold uppercase tracking-widest text-white hover:bg-brand-sage transition-all focus:outline-none shadow-sm"
-                    >
-                      Publish CMS Editorial content
-                    </button>
-                  </form>
-                )}
-
-                {/* ========================================== */}
-                {/* 8. BOTANICAL JOURNAL / BLOG VIEW */}
+                {/* 7. BOTANICAL JOURNAL / BLOG VIEW */}
                 {/* ========================================== */}
                 {activeTab === "blog" && (
                   <div className="space-y-6">

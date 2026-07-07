@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Check, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 
-interface AboutProps {
-  cms?: {
-    aboutText?: string;
-  };
-}
-
-export default function About({ cms }: AboutProps = {}) {
+export default function About() {
   const [isSectionVisible, setIsSectionVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -74,7 +68,9 @@ export default function About({ cms }: AboutProps = {}) {
             </div>
 
             <div className="space-y-5 text-sm font-sans font-light leading-relaxed text-brand-dark/70 md:text-base whitespace-pre-line">
-              <p>{cms?.aboutText}</p>
+              <p>
+                Bloom & Petal makes simple, beautiful bouquets for homes and gifts. We use seasonal flowers and put care into each arrangement so they feel personal and easy to enjoy.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 gap-4 border-t border-brand-blush/30 pt-6 sm:grid-cols-2">

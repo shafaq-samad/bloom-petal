@@ -147,17 +147,6 @@ const ReviewSchema = new Schema<IReview>({
   createdAt: { type: Date, default: Date.now }
 });
 
-// --- CMS ---
-export interface ICms extends Document {
-  key: string;
-  value: any;
-}
-
-const CmsSchema = new Schema<ICms>({
-  key: { type: String, required: true, unique: true },
-  value: { type: Schema.Types.Mixed, required: true }
-});
-
 // --- BLOG POST ---
 export interface IBlogPost extends Document {
   title: string;
@@ -186,5 +175,4 @@ export const Product = mongoose.model<IProduct>("Product", ProductSchema);
 export const Order = mongoose.model<IOrder>("Order", OrderSchema);
 export const DiscountCode = mongoose.model<IDiscountCode>("DiscountCode", DiscountCodeSchema);
 export const Review = mongoose.model<IReview>("Review", ReviewSchema);
-export const Cms = mongoose.model<ICms>("Cms", CmsSchema);
 export const BlogPost = mongoose.model<IBlogPost>("BlogPost", BlogPostSchema);
